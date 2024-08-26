@@ -62,7 +62,7 @@ function ErrorFallback() {
         <AlertDialogHeader>
           <AlertDialogTitle>Oops! Something went wrong.</AlertDialogTitle>
           <AlertDialogDescription>
-            I'm sorry for the inconvenience. Please try refreshing the page.
+            Sorry for the inconvenience. Please try refreshing the page.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
