@@ -26,7 +26,7 @@ export const useCountriesStore = create<CountryState>((set, get) => ({
   mapRef: null,
   updateFocusedCountry: (country) => set({ focusedCountry: country }),
   updateCountriesSelected: (countries) => set((state) => ({
-    countriesSelected: [...state.countriesSelected, ...countries]
+    countriesSelected: [...countries, ...state.countriesSelected]
   })),
   removeCountriesSelected: () => set({ countriesSelected: [], focusedCountry: null }),
   setMapRef: (ref) => set({ mapRef: ref }),

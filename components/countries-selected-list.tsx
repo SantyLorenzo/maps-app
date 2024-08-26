@@ -3,6 +3,8 @@
 import { TypographyH1 } from "./ui/typography-h1"
 import { useCountriesStore, CountryData } from "@/stores/countries"
 
+import { cn } from "@/lib/utils"
+
 export const CountriesSelectedList = () => {
   const { countriesSelected, focusedCountry, updateFocusedCountry, flyTo } = useCountriesStore((state) => state)
 
@@ -20,15 +22,16 @@ export const CountriesSelectedList = () => {
       {countriesSelected.map((country) => (
         <TypographyH1
           key={country['ISO Code']}
-          className={`hover:text-[#facc16] transition-colors duration-200 cursor-pointer ${focusedCountry && country['ISO Code'] === focusedCountry['ISO Code']
-            ? 'text-[#facc16]'
-            : ''
-            }`}
+          className={cn(
+            "hover:text-[#facc16] transition-colors duration-200 cursor-pointer",
+            focusedCountry && country['ISO Code'] === focusedCountry['ISO Code'] && "text-[#facc16]"
+          )}
           onClick={() => handleCountryClick(country)}
         >
           {country.Country}
         </TypographyH1>
-      ))}
-    </div>
+      ))
+      }
+    </div >
   )
 }

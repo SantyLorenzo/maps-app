@@ -23,7 +23,7 @@ export function Header({ onOptionChange }: HeaderProps) {
       );
 
       if (isAlreadySelected) {
-        // If already selected, just fly to it
+        // If already selected, fly to it
         flyTo(country);
       } else {
         // If not selected, add it to the list and fly to it

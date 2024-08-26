@@ -9,7 +9,6 @@ import Map, { MapRef, Marker } from 'react-map-gl';
 import { Header } from './header';
 import { Button } from './ui/button';
 import { CountryData, useCountriesStore } from '@/stores/countries';
-import { VFXProvider } from 'react-vfx';
 
 const mapboxToken = "pk.eyJ1Ijoic2FudGk0MjAiLCJhIjoiY20wYWFpbHYwMjAwbzJqb3BjOTN6cGN2YiJ9.rsNMX34bs4lrzGo96YVn1A"
 

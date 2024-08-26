@@ -76,7 +76,7 @@ export const CountryDetails = () => {
   )
 
   return (
-    <div className="bg-white/90 dark:bg-black/90 max-h-[400px] overflow-y-auto absolute bottom-8 sm:bottom-auto top-auto sm:top-1/2 sm:-translate-y-1/2 right-8 z-10 p-6 sm:p-8 flex flex-col border border-[#facc16] rounded-lg shadow-lg">
+    <div className="bg-white/90 dark:bg-black/90 max-h-[400px] overflow-y-auto absolute sm:bottom-auto top-24 sm:top-1/2 sm:-translate-y-1/2 left-8 sm:left-auto sm:right-8 z-10 p-6 sm:p-8 flex flex-col border border-[#facc16] rounded-lg shadow-lg">
       <a className="flex gap-1 absolute bottom-3 right-3 text-[6px]" href="https://github.com/trevorblades/countries" target="_blank" rel="noopener noreferrer">
         https://countries.trevorblades.com
         <SquareArrowOutUpRight className="h-2 w-2" color="#facc16" />
