@@ -1,7 +1,6 @@
 "use client"
 
 import React, { ErrorInfo, ReactNode } from 'react'
-import { useToast } from "@/components/ui/use-toast"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -46,16 +45,6 @@ class ErrorBoundary extends React.Component<Props, State> {
 }
 
 function ErrorFallback() {
-  const { toast } = useToast()
-
-  React.useEffect(() => {
-    toast({
-      title: "Error",
-      description: "An unexpected error occurred. Please try refreshing the page.",
-      variant: "destructive",
-    })
-  }, [toast])
-
   return (
     <AlertDialog defaultOpen>
       <AlertDialogContent>
