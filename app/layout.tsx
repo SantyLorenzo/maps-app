@@ -3,10 +3,12 @@ import type { Metadata } from "next";
 import { cn } from "@/lib/utils"
 import { Inter as FontSans } from "next/font/google"
 
-import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster"
 import { ApolloWrapper } from "@/lib/apollo-wrapper";
+import { ThemeProvider } from "@/components/theme-provider";
 
 import "./globals.css";
+import ErrorBoundary from "@/lib/error-boundary";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -31,16 +33,20 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ApolloWrapper>
-            {children}
-          </ApolloWrapper>
-        </ThemeProvider>
+        <ErrorBoundary>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ApolloWrapper>
+              {children}
+              <Toaster />
+            </ApolloWrapper>
+          </ThemeProvider>
+        </ErrorBoundary>
+
       </body>
     </html >
   );

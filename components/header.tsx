@@ -1,6 +1,6 @@
 "use client"
 
-import countries from '@/data/Countries.json'
+import countries from '@/data/countries.json'
 import { Combobox } from './ui/combobox';
 import { CountryData, useCountriesStore } from "@/stores/countries";
 

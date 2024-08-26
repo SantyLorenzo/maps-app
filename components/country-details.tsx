@@ -7,6 +7,8 @@ import { Button } from "./ui/button";
 import { TypographyP } from './ui/typography-p';
 import { TypographyH1 } from './ui/typography-h1';
 import { useCountriesStore } from "@/stores/countries"
+import { useToast } from "./ui/use-toast";
+import { useEffect } from "react";
 
 interface CountryDetails {
   __typename: "Country";
@@ -43,12 +45,22 @@ query GetCountryDetails($code: ID!) {
 `;
 
 export const CountryDetails = () => {
+  const { toast } = useToast()
   const { focusedCountry, closeDetails } = useCountriesStore((state) => state)
   const { data, error } = useSuspenseQuery<CountryData>(GET_COUNTRY_DETAILS, {
     skip: !focusedCountry,
     variables: { code: focusedCountry?.['ISO Code'] },
-    errorPolicy: "ignore"
   });
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to load country details. Please try again later.",
+        variant: "destructive",
+      })
+    }
+  }, [error, toast])
 
   const handleClose = () => {
     closeDetails();
@@ -96,23 +108,23 @@ export const CountryDetails = () => {
             {data.country.name}
           </TypographyH1>
           <TypographyP>
-            <strong>Native Name:</strong>
+            <strong>Native Name: </strong>
             {data.country.native}
           </TypographyP>
           <TypographyP>
-            <strong>Capital:</strong>
+            <strong>Capital: </strong>
             {data.country.capital}
           </TypographyP>
           <TypographyP>
-            <strong>Emoji:</strong>
+            <strong>Emoji: </strong>
             {data.country.emoji}
           </TypographyP>
           <TypographyP>
-            <strong>Currency:</strong>
+            <strong>Currency: </strong>
             {data.country.currency}
           </TypographyP>
           <div className="mt-2">
-            <strong>Languages:</strong>
+            <strong>Languages: </strong>
             <ul className="list-disc list-inside">
               {data.country.languages.map((lang) => (
                 <li key={lang.code}>{lang.name} ({lang.code})</li>

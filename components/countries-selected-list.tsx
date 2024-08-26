@@ -2,7 +2,7 @@
 
 import { TypographyH1 } from "./ui/typography-h1"
 import { useCountriesStore, CountryData } from "@/stores/countries"
-
+import { TypographyP } from "./ui/typography-p"
 import { cn } from "@/lib/utils"
 
 export const CountriesSelectedList = () => {
