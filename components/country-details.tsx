@@ -40,11 +40,12 @@ export const CountryDetails = ({ latitude, longitude }: CountryDetailsProps) => 
   if (error) {
     return (
       <Popup
+        offset={20}
+        anchor='bottom'
+        maxWidth='320px'
         latitude={latitude}
         longitude={longitude}
         style={{ padding: 0 }}
-        offset={20}
-        maxWidth='320px'
         onClose={() => setPopupVisible(false)}
       >
         <div className='flex flex-col px-2 mr-2'>
