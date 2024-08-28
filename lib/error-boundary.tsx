@@ -1,6 +1,7 @@
 "use client"
 
 import React, { ErrorInfo, ReactNode } from 'react'
+import { useToast } from "@/components/ui/use-toast"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -51,7 +52,7 @@ function ErrorFallback() {
         <AlertDialogHeader>
           <AlertDialogTitle>Oops! Something went wrong.</AlertDialogTitle>
           <AlertDialogDescription>
-            Sorry for the inconvenience. Please try refreshing the page.
+            I'm sorry for the inconvenience. Please try refreshing the page.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

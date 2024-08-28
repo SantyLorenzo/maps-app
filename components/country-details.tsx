@@ -1,139 +1,96 @@
 "use client"
 
-import { X, SquareArrowOutUpRight } from "lucide-react";
-import { gql, useSuspenseQuery } from '@apollo/client';
+import { Popup } from 'react-map-gl';
+import { motion } from "framer-motion"
+import { useSuspenseQuery } from '@apollo/client';
 
 import { Button } from "./ui/button";
 import { TypographyP } from './ui/typography-p';
 import { TypographyH1 } from './ui/typography-h1';
-import { useCountriesStore } from "@/stores/countries"
-import { useToast } from "./ui/use-toast";
-import { useEffect } from "react";
+import { useCountriesStore } from "@/stores/countries";
+import { CountryDetailsResponse, GET_COUNTRY_DETAILS } from "@/api/countries";
 
-interface CountryDetails {
-  __typename: "Country";
-  name: string;
-  native: string;
-  capital: string;
-  emoji: string;
-  currency: string;
-  languages: {
-    __typename: "Language";
-    code: string;
-    name: string;
-  }[];
+interface CountryDetailsProps {
+  latitude: number;
+  longitude: number;
 }
 
-interface CountryData {
-  country: CountryDetails;
-}
+export const CountryDetails = ({ latitude, longitude }: CountryDetailsProps) => {
+  const {
+    focusedIndex,
+    popupVisible,
+    setPopupVisible,
+    countriesSelected,
+  } = useCountriesStore((state) => state);
+  const focusedCountry = focusedIndex !== null ? countriesSelected[focusedIndex] : null;
 
-const GET_COUNTRY_DETAILS = gql`
-query GetCountryDetails($code: ID!) {
-  country(code: $code) {
-    name
-    native
-    capital
-    emoji
-    currency
-    languages {
-      name
-      code
-    }
-  }
-}
-`;
-
-export const CountryDetails = () => {
-  const { toast } = useToast()
-  const { focusedCountry, closeDetails } = useCountriesStore((state) => state)
-  const { data, error } = useSuspenseQuery<CountryData>(GET_COUNTRY_DETAILS, {
+  const { data, error } = useSuspenseQuery<CountryDetailsResponse>(GET_COUNTRY_DETAILS, {
     skip: !focusedCountry,
     variables: { code: focusedCountry?.['ISO Code'] },
   });
 
-  useEffect(() => {
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to load country details. Please try again later.",
-        variant: "destructive",
-      })
-    }
-  }, [error, toast])
-
-  const handleClose = () => {
-    closeDetails();
-  };
-
-  if (!focusedCountry) {
+  if (
+    !data ||
+    !popupVisible ||
+    !focusedCountry
+  ) {
     return null
   }
 
-  if (error) return (
-    <div className="bg-white/90 dark:bg-black/90 max-h-[400px] overflow-y-auto absolute bottom-8 sm:bottom-auto top-auto sm:top-1/2 sm:-translate-y-1/2 right-8 z-10 p-6 sm:p-8 flex flex-col border border-[#facc16] rounded-lg shadow-lg">
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={handleClose}
-        className="absolute top-2 right-2"
-        aria-label="Close details"
+  if (error) {
+    return (
+      <Popup
+        latitude={latitude}
+        longitude={longitude}
+        style={{ padding: 0 }}
+        offset={20}
+        maxWidth='320px'
+        onClose={() => setPopupVisible(false)}
       >
-        <X className="h-4 w-4" />
-      </Button>
-      <div className='flex flex-col gap-2 text-sm sm:text-lg'>
-        <TypographyH1>{error.message}</TypographyH1>
-      </div>
-    </div>
-  )
+        <div className='flex flex-col px-2 mr-2'>
+          <TypographyP>
+            Error loading country details. Please try refreshing the page.
+          </TypographyP>
+          <Button onClick={() => window.location.reload()}>Reload</Button>
+        </div>
+      </Popup>
+    )
+  }
+
+  const languageText = data.country.languages.length === 1
+    ? `The primary language spoken is ${data.country.languages[0].name}.`
+    : `The primary languages spoken are ${data.country.languages.map(lang => lang.name).join(", ")}.`;
+
 
   return (
-    <div className="bg-white/90 dark:bg-black/90 max-h-[400px] overflow-y-auto absolute sm:bottom-auto top-24 sm:top-1/2 sm:-translate-y-1/2 left-8 sm:left-auto sm:right-8 z-10 p-6 sm:p-8 flex flex-col border border-[#facc16] rounded-lg shadow-lg">
-      <a className="flex gap-1 absolute bottom-3 right-3 text-[6px]" href="https://github.com/trevorblades/countries" target="_blank" rel="noopener noreferrer">
-        https://countries.trevorblades.com
-        <SquareArrowOutUpRight className="h-2 w-2" color="#facc16" />
-      </a>
-      <Button
-        size="icon"
-        variant="ghost"
-        onClick={handleClose}
-        className="absolute p-2 top-0 right-0 "
-        aria-label="Close details"
+    <motion.div
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Popup
+        latitude={latitude}
+        longitude={longitude}
+        style={{ padding: 0 }}
+        offset={20}
+        maxWidth='320px'
+        onClose={() => setPopupVisible(false)}
       >
-        <X className="h-4 w-4" />
-      </Button>
-      {data?.country && (
-        <div className='flex flex-col gap-2 text-sm sm:text-lg'>
-          <TypographyH1 className="mb-4">
+        <div className='flex flex-col px-2 mr-2'>
+          <TypographyH1 className="mb-2 text-xl dark:text-black">
             {data.country.name}
           </TypographyH1>
           <TypographyP>
-            <strong>Native Name: </strong>
-            {data.country.native}
+            Located in {data.country.continent.name}, its capital is {data.country.capital}.
+            <br />
+            The currency used is {data.country.currency}.
+            <br />
+            {languageText}
+            <br />
+            It is represented by the emoji {data.country.emoji}.
           </TypographyP>
-          <TypographyP>
-            <strong>Capital: </strong>
-            {data.country.capital}
-          </TypographyP>
-          <TypographyP>
-            <strong>Emoji: </strong>
-            {data.country.emoji}
-          </TypographyP>
-          <TypographyP>
-            <strong>Currency: </strong>
-            {data.country.currency}
-          </TypographyP>
-          <div className="mt-2">
-            <strong>Languages: </strong>
-            <ul className="list-disc list-inside">
-              {data.country.languages.map((lang) => (
-                <li key={lang.code}>{lang.name} ({lang.code})</li>
-              ))}
-            </ul>
-          </div>
         </div>
-      )
-      }
-    </div >
-  )
+      </Popup>
+    </motion.div>
+  );
 }

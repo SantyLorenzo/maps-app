@@ -8,7 +8,7 @@ export function TypographyP({
   className?: string;
 }>) {
   return (
-    <p className={cn("leading-none", className)}>
+    <p className={cn("text-sm dark:text-black", className)}>
       {children}
     </p>
   )
