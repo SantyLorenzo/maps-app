@@ -14,8 +14,7 @@ import { CountryData, useCountriesStore } from '@/stores/countries';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-// Load the Mapbox token from environment variables
-const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+const mapboxToken = "pk.eyJ1Ijoic2FudGk0MjAiLCJhIjoiY20wYWFpbHYwMjAwbzJqb3BjOTN6cGN2YiJ9.rsNMX34bs4lrzGo96YVn1A"
 
 const initialViewState = {
   zoom: 2,
