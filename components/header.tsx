@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 
-import countries from '@/data/countries.json'
+import countries from '@/data/Countries.json'
 import { Combobox } from './ui/combobox';
 import { useCountriesStore } from "@/stores/countries";
 
